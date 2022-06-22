@@ -48,11 +48,9 @@ func Top10(sourceStr string) []string {
 	})
 
 	// формирование результирующего массива
-	cnt := 0
-	for _, v := range frequencyArray {
-		cnt++
+	for i, v := range frequencyArray {
 		resultArray = append(resultArray, v.Word)
-		if cnt == cntResultValue {
+		if i >= cntResultValue-1 {
 			break
 		}
 	}
@@ -63,7 +61,6 @@ func Top10(sourceStr string) []string {
 // contains указывает, содержится ли строка в массиве строк.
 func contains(array []FrequencyAnalytic, searchStr string) (int, bool) {
 	for i, v := range array {
-		strings.EqualFold(v.Word, searchStr)
 		if strings.EqualFold(v.Word, searchStr) {
 			return i, true
 		}
