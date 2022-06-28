@@ -10,6 +10,8 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
+const screening = `\`
+
 type step struct {
 	lastChar     string
 	currentChar  string
@@ -32,7 +34,7 @@ func Unpack(source string) (string, error) {
 	for _, r := range source {
 		step.currentChar = string(r)
 		// если текущий символ - символ экранирования
-		if step.currentChar == `\` {
+		if step.currentChar == screening {
 			step.processScreening()
 			continue
 		}
@@ -59,7 +61,7 @@ func validateString(str string) bool {
 		return true
 	}
 
-	cutString := strings.TrimRight(str, `\`)
+	cutString := strings.TrimRight(str, screening)
 	if (len(str)-len(cutString))%2 > 0 {
 		return false
 	}
@@ -70,7 +72,7 @@ func validateString(str string) bool {
 }
 
 func (s *step) processScreening() {
-	if s.lastChar == `\` {
+	if s.lastChar == screening {
 		s.resultString.WriteString(s.currentChar)
 		s.lastChar = ""
 	} else {
@@ -79,7 +81,7 @@ func (s *step) processScreening() {
 }
 
 func (s *step) processChar() error {
-	if s.lastChar == `\` {
+	if s.lastChar == screening {
 		return ErrInvalidString
 	}
 	s.resultString.WriteString(s.currentChar)
@@ -96,7 +98,7 @@ func (s *step) processDigital() error {
 		}
 		resultRune := []rune(s.resultString.String())
 		s.lastChar = string(resultRune[len(resultRune)-1])
-		if s.lastChar == `\` {
+		if s.lastChar == screening {
 			cnt, err := strconv.Atoi(s.currentChar)
 			if err != nil {
 				return err
@@ -106,7 +108,7 @@ func (s *step) processDigital() error {
 		} else {
 			return ErrInvalidString
 		}
-	case `\`:
+	case screening:
 		s.resultString.WriteString(s.currentChar)
 		s.lastChar = s.currentChar
 	default:
