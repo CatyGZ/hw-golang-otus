@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -43,6 +43,16 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+var englishText = `Traditional Bedouin families live in large tents about 
+	half the size of a basketball court. The tents are divided into 
+	two sections: the first is for receiving guests in true Bedouin 
+	style - they have the reputation of being the world's most generous 
+	hosts. Visitors are always served a big meal as soon as they arrive. 
+	The second part of the tent is the family's shared kitchen, living room, 
+	dining room, and bedroom. They don't have tables and chairs, as the whole 
+	family sits on the floor to eat. And instead of beds, everybody 
+	sleeps on mattresses which are piled into a corner of the room during the day...`
+
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10(""), 0)
@@ -77,6 +87,39 @@ func TestTop10(t *testing.T) {
 				"то",        // 4
 			}
 			require.Equal(t, expected, Top10(text))
+		}
+	})
+
+	t.Run("positive test on english language", func(t *testing.T) {
+		if taskWithAsteriskIsCompleted {
+			expected := []string{
+				"the",     // 12
+				"of",      // 5
+				"a",       // 3
+				"and",     // 3
+				"are",     // 3
+				"as",      // 3
+				"room",    // 3
+				"they",    // 3
+				"bedouin", // 2
+				"have",    // 2
+			}
+			require.Equal(t, expected, Top10(englishText))
+		} else {
+			expected := []string{
+				"the",     // 10
+				"of",      // 5
+				"a",       // 3
+				"are",     // 3
+				"as",      // 3
+				"Bedouin", // 2
+				"The",     // 2
+				"and",     // 2
+				"have",    // 2
+				"in",      // 1
+
+			}
+			require.Equal(t, expected, Top10(englishText))
 		}
 	})
 }
